@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\Admins\UserController;
 use App\Http\Controllers\Admins\AdminDashboardController;
 
 /*
@@ -35,6 +36,8 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::prefix('admin')->middleware(['auth:sanctum', 'verified'])->name('admin')->group(function() {
-    Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard.index');
-});
+Route::prefix('admin')->name('admin.')->middleware(['auth:sanctum', 'verified'])->group(
+    function() {
+        Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard.index');
+        Route::resource('users', UserController::class)->except(['create', 'show', 'edit']);
+    });
